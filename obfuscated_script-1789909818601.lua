@@ -4,6 +4,7 @@ local Window = Rayfield:CreateWindow({
    Name = "Killer Stairs | MMP",
    LoadingTitle = "Killer Stairs Script",
    LoadingSubtitle = "by MMP",
+   ShowText = "MMP",
    ConfigurationSaving = {
       Enabled = false
    },
@@ -28,7 +29,7 @@ MainTab:CreateButton({
    end,
 })
 
-MainTab:CreateSection("Movement Mods")
+MainTab:CreateSection("Speed Hack")
 
 MainTab:CreateSlider({
    Name = "WalkSpeed",
@@ -52,7 +53,7 @@ MainTab:CreateSection("Credits")
 MainTab:CreateLabel("Script Made by MMP")
 
 -- Shortcut Tab
-local ShortcutTab = Window:CreateTab("Shortcut", 4483362458)
+local ShortcutTab = Window:CreateTab("Shortcuts", 4483362458)
 
 ShortcutTab:CreateSection("External Scripts & Utilities")
 
@@ -64,7 +65,7 @@ ShortcutTab:CreateButton({
 })
 
 ShortcutTab:CreateButton({
-   Name = "Teleport Shortcut Button",
+   Name = " Open Mini Teleport Window",
    Callback = function()
        local player = game.Players.LocalPlayer
        local character = player.Character or player.CharacterAdded:Wait()
