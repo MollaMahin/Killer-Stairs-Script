@@ -25,6 +25,13 @@ MainTab:CreateButton({
        local killerTP = workspace:FindFirstChild("killerTP")
        if killerTP then
            character:MoveTo(killerTP.Position + Vector3.new(0, 3, 0))
+           
+           Rayfield:Notify({
+               Title = "Notification",
+               Content = "Teleported!",
+               Duration = 3,
+               Image = 4483362458,
+           })
        end
    end,
 })
@@ -52,6 +59,33 @@ MainTab:CreateSlider({
 MainTab:CreateSection("Credits")
 MainTab:CreateLabel("Script Made by MMP")
 
+-- Local Player Tab
+local LocalPlayerTab = Window:CreateTab("Player", 4483362458)
+
+LocalPlayerTab:CreateSection("Emotes")
+
+LocalPlayerTab:CreateButton({
+   Name = "E Dance",
+   Callback = function()
+       local TextChatService = game:GetService("TextChatService")
+       local ReplicatedStorage = game:GetService("ReplicatedStorage")
+       
+       -- Check for modern TextChatService
+       if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+           local generalChannel = TextChatService.TextChannels:FindFirstChild("RBXGeneral")
+           if generalChannel then
+               generalChannel:SendAsync("/e dance")
+           end
+       else
+           -- Fallback for legacy chat systems
+           local chatEvent = ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
+           if chatEvent and chatEvent:FindFirstChild("SayMessageRequest") then
+               chatEvent.SayMessageRequest:FireServer("/e dance", "All")
+           end
+       end
+   end,
+})
+
 -- Shortcut Tab
 local ShortcutTab = Window:CreateTab("Shortcuts", 4483362458)
 
@@ -61,11 +95,18 @@ ShortcutTab:CreateButton({
    Name = "Open Infinite Yield",
    Callback = function()
        loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+       
+       Rayfield:Notify({
+           Title = "Notification",
+           Content = "Infinite Yield Loaded!",
+           Duration = 3,
+           Image = 4483362458,
+       })
    end,
 })
 
 ShortcutTab:CreateButton({
-   Name = "Open Mini Teleport Window",
+   Name = " Open Mini Teleport Window",
    Callback = function()
        local player = game.Players.LocalPlayer
        local character = player.Character or player.CharacterAdded:Wait()
@@ -162,7 +203,7 @@ ShortcutTab:CreateButton({
        minimizeBtn.TextSize = 22
        minimizeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 
-       -- Functionality
+       -- Functionality (Teleports without sending notification)
        button.MouseButton1Click:Connect(function()
            local killerTP = workspace:FindFirstChild("killerTP")
            if killerTP then
@@ -187,5 +228,13 @@ ShortcutTab:CreateButton({
                minimizeBtn.Text = "-"
            end
        end)
+
+       -- Rayfield notification when opening mini window
+       Rayfield:Notify({
+           Title = "Notification",
+           Content = "Window Loaded!",
+           Duration = 2,
+           Image = 4483362458,
+       })
    end,
 })
