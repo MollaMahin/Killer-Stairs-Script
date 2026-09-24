@@ -59,29 +59,129 @@ MainTab:CreateSlider({
 MainTab:CreateSection("Credits")
 MainTab:CreateLabel("Script Made by MMP")
 
--- Local Player Tab
-local LocalPlayerTab = Window:CreateTab("Player", 4483362458)
+-- Player Tab
+local PlayerTab = Window:CreateTab("Player", 4483362458)
 
-LocalPlayerTab:CreateSection("Emotes")
+PlayerTab:CreateSection("Actions")
 
-LocalPlayerTab:CreateButton({
+PlayerTab:CreateButton({
+   Name = "Reset Player",
+   Callback = function()
+       local player = game.Players.LocalPlayer
+       local character = player.Character or player.CharacterAdded:Wait()
+       
+       if character then
+           character:BreakJoints()
+       end
+   end,
+})
+
+PlayerTab:CreateSection("Emotes")
+
+PlayerTab:CreateButton({
    Name = "E Dance",
    Callback = function()
        local TextChatService = game:GetService("TextChatService")
        local ReplicatedStorage = game:GetService("ReplicatedStorage")
        
-       -- Check for modern TextChatService
        if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
            local generalChannel = TextChatService.TextChannels:FindFirstChild("RBXGeneral")
            if generalChannel then
                generalChannel:SendAsync("/e dance")
            end
        else
-           -- Fallback for legacy chat systems
            local chatEvent = ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
            if chatEvent and chatEvent:FindFirstChild("SayMessageRequest") then
                chatEvent.SayMessageRequest:FireServer("/e dance", "All")
            end
+       end
+   end,
+})
+
+-- Troll Tab
+local TrollTab = Window:CreateTab("Troll", 4483362458)
+
+TrollTab:CreateSection("Target Selection")
+
+local selectedPlayerName = nil
+
+local function getPlayerList()
+    local players = {}
+    for _, p in ipairs(game.Players:GetPlayers()) do
+        table.insert(players, p.Name)
+    end
+    return players
+end
+
+local PlayerDropdown = TrollTab:CreateDropdown({
+   Name = "Select Player",
+   Options = getPlayerList(),
+   CurrentOption = "",
+   MultipleOptions = false,
+   Flag = "TargetPlayerDropdown",
+   Callback = function(Option)
+       if type(Option) == "table" then
+           selectedPlayerName = Option[1]
+       else
+           selectedPlayerName = Option
+       end
+   end,
+})
+
+game.Players.PlayerAdded:Connect(function()
+    PlayerDropdown:Refresh(getPlayerList())
+end)
+
+game.Players.PlayerRemoving:Connect(function()
+    PlayerDropdown:Refresh(getPlayerList())
+end)
+
+TrollTab:CreateButton({
+   Name = "Kill Player",
+   Callback = function()
+       if not selectedPlayerName or selectedPlayerName == "" then
+           Rayfield:Notify({
+               Title = "Notification",
+               Content = "Please select a player first!",
+               Duration = 3,
+               Image = 4483362458,
+           })
+           return
+       end
+
+       local targetPlayer = game.Players:FindFirstChild(selectedPlayerName)
+       if targetPlayer and targetPlayer.Character then
+           local char = targetPlayer.Character
+           local humanoid = char:FindFirstChildOfClass("Humanoid")
+           
+           -- Method 1: Break character joints
+           char:BreakJoints()
+           
+           -- Method 2: Take damage call
+           if humanoid then
+               humanoid:TakeDamage(humanoid.MaxHealth or 9999)
+               humanoid.Health = 0
+           end
+           
+           -- Method 3: Destroy Head / Neck joint if unanchored
+           local head = char:FindFirstChild("Head")
+           if head then
+               head:Destroy()
+           end
+
+           Rayfield:Notify({
+               Title = "Notification",
+               Content = "Attempted to kill " .. selectedPlayerName,
+               Duration = 3,
+               Image = 4483362458,
+           })
+       else
+           Rayfield:Notify({
+               Title = "Notification",
+               Content = "Target player not found!",
+               Duration = 3,
+               Image = 4483362458,
+           })
        end
    end,
 })
@@ -184,7 +284,7 @@ ShortcutTab:CreateButton({
        credit.TextColor3 = Color3.fromRGB(255, 255, 255)
 
        -- Close Button
-       local closeBtn = Instance.new("TextButton", frame)
+       closeBtn = Instance.new("TextButton", frame)
        closeBtn.Size = UDim2.new(0, 25, 0, 25)
        closeBtn.Position = UDim2.new(1, -28, 0, 7)
        closeBtn.BackgroundTransparency = 1
@@ -203,7 +303,7 @@ ShortcutTab:CreateButton({
        minimizeBtn.TextSize = 22
        minimizeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 
-       -- Functionality (Teleports without sending notification)
+       -- Functionality
        button.MouseButton1Click:Connect(function()
            local killerTP = workspace:FindFirstChild("killerTP")
            if killerTP then
@@ -233,7 +333,7 @@ ShortcutTab:CreateButton({
        Rayfield:Notify({
            Title = "Notification",
            Content = "Window Loaded!",
-           Duration = 2,
+           Duration = 3,
            Image = 4483362458,
        })
    end,
