@@ -17,7 +17,7 @@ local MainTab = Window:CreateTab("Main", 4483362458)
 MainTab:CreateSection("Teleportation")
 
 MainTab:CreateButton({
-   Name = "Teleport",
+   Name = "Teleport to the Top",
    Callback = function()
        local player = game.Players.LocalPlayer
        local character = player.Character or player.CharacterAdded:Wait()
@@ -25,6 +25,25 @@ MainTab:CreateButton({
        local killerTP = workspace:FindFirstChild("killerTP")
        if killerTP then
            character:MoveTo(killerTP.Position + Vector3.new(0, 3, 0))
+           
+           Rayfield:Notify({
+               Title = "Notification",
+               Content = "Teleported!",
+               Duration = 3,
+               Image = 4483362458,
+           })
+       end
+   end,
+})
+
+MainTab:CreateButton({
+   Name = "Teleport to the Finish Line",
+   Callback = function()
+       local player = game.Players.LocalPlayer
+       local character = player.Character or player.CharacterAdded:Wait()
+       
+       if character then
+           character:MoveTo(Vector3.new(-2, 601, -1224))
            
            Rayfield:Notify({
                Title = "Notification",
@@ -98,94 +117,6 @@ PlayerTab:CreateButton({
    end,
 })
 
--- Troll Tab
-local TrollTab = Window:CreateTab("Troll", 4483362458)
-
-TrollTab:CreateSection("Target Selection")
-
-local selectedPlayerName = nil
-
-local function getPlayerList()
-    local players = {}
-    for _, p in ipairs(game.Players:GetPlayers()) do
-        table.insert(players, p.Name)
-    end
-    return players
-end
-
-local PlayerDropdown = TrollTab:CreateDropdown({
-   Name = "Select Player",
-   Options = getPlayerList(),
-   CurrentOption = "",
-   MultipleOptions = false,
-   Flag = "TargetPlayerDropdown",
-   Callback = function(Option)
-       if type(Option) == "table" then
-           selectedPlayerName = Option[1]
-       else
-           selectedPlayerName = Option
-       end
-   end,
-})
-
-game.Players.PlayerAdded:Connect(function()
-    PlayerDropdown:Refresh(getPlayerList())
-end)
-
-game.Players.PlayerRemoving:Connect(function()
-    PlayerDropdown:Refresh(getPlayerList())
-end)
-
-TrollTab:CreateButton({
-   Name = "Kill Player",
-   Callback = function()
-       if not selectedPlayerName or selectedPlayerName == "" then
-           Rayfield:Notify({
-               Title = "Notification",
-               Content = "Please select a player first!",
-               Duration = 3,
-               Image = 4483362458,
-           })
-           return
-       end
-
-       local targetPlayer = game.Players:FindFirstChild(selectedPlayerName)
-       if targetPlayer and targetPlayer.Character then
-           local char = targetPlayer.Character
-           local humanoid = char:FindFirstChildOfClass("Humanoid")
-           
-           -- Method 1: Break character joints
-           char:BreakJoints()
-           
-           -- Method 2: Take damage call
-           if humanoid then
-               humanoid:TakeDamage(humanoid.MaxHealth or 9999)
-               humanoid.Health = 0
-           end
-           
-           -- Method 3: Destroy Head / Neck joint if unanchored
-           local head = char:FindFirstChild("Head")
-           if head then
-               head:Destroy()
-           end
-
-           Rayfield:Notify({
-               Title = "Notification",
-               Content = "Attempted to kill " .. selectedPlayerName,
-               Duration = 3,
-               Image = 4483362458,
-           })
-       else
-           Rayfield:Notify({
-               Title = "Notification",
-               Content = "Target player not found!",
-               Duration = 3,
-               Image = 4483362458,
-           })
-       end
-   end,
-})
-
 -- Shortcut Tab
 local ShortcutTab = Window:CreateTab("Shortcuts", 4483362458)
 
@@ -223,7 +154,7 @@ ShortcutTab:CreateButton({
 
        -- Main frame
        local frame = Instance.new("Frame", gui)
-       frame.Size = UDim2.new(0, 200, 0, 130)
+       frame.Size = UDim2.new(0, 200, 0, 170)
        frame.Position = UDim2.new(0.5, -100, 0.4, 0)
        frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
        frame.BorderSizePixel = 0
@@ -257,21 +188,37 @@ ShortcutTab:CreateButton({
        content.Position = UDim2.new(0, 0, 0, 40)
        content.BackgroundTransparency = 1
 
-       -- Instant Win button
-       local button = Instance.new("TextButton", content)
-       button.Size = UDim2.new(0.8, 0, 0, 40)
-       button.Position = UDim2.new(0.1, 0, 0.1, 0)
-       button.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-       button.Text = "Teleport"
-       button.Font = Enum.Font.Arcade
-       button.TextSize = 20
-       button.TextColor3 = Color3.fromRGB(255, 255, 255)
+       -- Teleport to the Top button
+       local buttonTop = Instance.new("TextButton", content)
+       buttonTop.Size = UDim2.new(0.85, 0, 0, 32)
+       buttonTop.Position = UDim2.new(0.075, 0, 0.05, 0)
+       buttonTop.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+       buttonTop.Text = "Teleport to Top"
+       buttonTop.Font = Enum.Font.Arcade
+       buttonTop.TextSize = 14
+       buttonTop.TextColor3 = Color3.fromRGB(255, 255, 255)
 
-       local btnCorner = Instance.new("UICorner", button)
-       btnCorner.CornerRadius = UDim.new(0, 6)
+       local btnTopCorner = Instance.new("UICorner", buttonTop)
+       btnTopCorner.CornerRadius = UDim.new(0, 6)
 
-       local btnStroke = Instance.new("UIStroke", button)
-       btnStroke.Color = Color3.fromRGB(255, 255, 255)
+       local btnTopStroke = Instance.new("UIStroke", buttonTop)
+       btnTopStroke.Color = Color3.fromRGB(255, 255, 255)
+
+       -- Teleport to the Finish Line button
+       local buttonFinish = Instance.new("TextButton", content)
+       buttonFinish.Size = UDim2.new(0.85, 0, 0, 32)
+       buttonFinish.Position = UDim2.new(0.075, 0, 0.4, 0)
+       buttonFinish.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+       buttonFinish.Text = "Teleport to Finish"
+       buttonFinish.Font = Enum.Font.Arcade
+       buttonFinish.TextSize = 14
+       buttonFinish.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+       local btnFinishCorner = Instance.new("UICorner", buttonFinish)
+       btnFinishCorner.CornerRadius = UDim.new(0, 6)
+
+       local btnFinishStroke = Instance.new("UIStroke", buttonFinish)
+       btnFinishStroke.Color = Color3.fromRGB(255, 255, 255)
 
        -- Credit
        local credit = Instance.new("TextLabel", content)
@@ -284,7 +231,7 @@ ShortcutTab:CreateButton({
        credit.TextColor3 = Color3.fromRGB(255, 255, 255)
 
        -- Close Button
-       closeBtn = Instance.new("TextButton", frame)
+       local closeBtn = Instance.new("TextButton", frame)
        closeBtn.Size = UDim2.new(0, 25, 0, 25)
        closeBtn.Position = UDim2.new(1, -28, 0, 7)
        closeBtn.BackgroundTransparency = 1
@@ -304,11 +251,15 @@ ShortcutTab:CreateButton({
        minimizeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 
        -- Functionality
-       button.MouseButton1Click:Connect(function()
+       buttonTop.MouseButton1Click:Connect(function()
            local killerTP = workspace:FindFirstChild("killerTP")
            if killerTP then
                character:MoveTo(killerTP.Position + Vector3.new(0, 3, 0))
            end
+       end)
+
+       buttonFinish.MouseButton1Click:Connect(function()
+           character:MoveTo(Vector3.new(-2, 601, -1224))
        end)
 
        closeBtn.MouseButton1Click:Connect(function()
@@ -324,7 +275,7 @@ ShortcutTab:CreateButton({
                minimizeBtn.Text = "+"
            else
                content.Visible = true
-               frame.Size = UDim2.new(0, 200, 0, 130)
+               frame.Size = UDim2.new(0, 200, 0, 170)
                minimizeBtn.Text = "-"
            end
        end)
