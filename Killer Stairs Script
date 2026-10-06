@@ -1,20 +1,33 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
+-- Direct Discord logo setup
 local logoUrl = "https://cdn.discordapp.com/attachments/1453659040658751742/1556984559759794276/Untitled25_20260211142144.png?backend=b2&ex=6ac6265e&is=6ac4d4de&hm=575ad8792455bbec1ffd673029bbdd2a9eb89b9f14f91152b635694d4b75f6f3&"
 
 if not isfile("mmp_logo.png") then
     writefile("mmp_logo.png", game:HttpGet(logoUrl))
 end
 
+local customIcon = getcustomasset("mmp_logo.png")
+
 local Window = Rayfield:CreateWindow({
    Name = "Killer Stairs | MMP",
+   Icon = customIcon, -- Sets the top-left logo image for the Rayfield UI header
    LoadingTitle = "Killer Stairs Script",
    LoadingSubtitle = "by MMP",
    ShowText = "MMP",
    ConfigurationSaving = {
-      Enabled = false
+      Enabled = true
    },
-   KeySystem = false
+   KeySystem = true,
+   KeySettings = {
+      Title = "MMP Key System",
+      Subtitle = "Enter Key to Access",
+      Note = "Join our Discord for keys!",
+      FileName = "MMPKey",
+      SaveKey = false,
+      GrabKeyFromSite = false,
+      Key = {"2026MMP"}
+   }
 })
 
 -- Main Tab
@@ -82,7 +95,29 @@ MainTab:CreateSlider({
 })
 
 MainTab:CreateSection("Credits")
-MainTab:CreateLabel("Script Made by MMP")
+MainTab:CreateLabel("Script Made by MMP (@MMP_Main)")
+
+MainTab:CreateButton({
+   Name = "Copy discord link (For support and keys)",
+   Callback = function()
+       if setclipboard then
+           setclipboard("https://discord.gg/2MPZG3MEVP")
+           Rayfield:Notify({
+               Title = "Notification",
+               Content = 'Copied "https://discord.gg/2MPZG3MEVP"!',
+               Duration = 3,
+               Image = 4483362458,
+           })
+       else
+           Rayfield:Notify({
+               Title = "Error",
+               Content = "Your executor does not support setclipboard.",
+               Duration = 3,
+               Image = 4483362458,
+           })
+       end
+   end,
+})
 
 -- Player Tab
 local PlayerTab = Window:CreateTab("Player", 4483362458)
@@ -148,17 +183,14 @@ ShortcutTab:CreateButton({
        local player = game.Players.LocalPlayer
        local character = player.Character or player.CharacterAdded:Wait()
 
-       -- Prevent duplicate GUIs
        if player.PlayerGui:FindFirstChild("KillerStairGui") then
            player.PlayerGui.KillerStairGui:Destroy()
        end
 
-       -- Create ScreenGui
        local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
        gui.Name = "KillerStairGui"
        gui.ResetOnSpawn = false
 
-       -- Main frame
        local frame = Instance.new("Frame", gui)
        frame.Size = UDim2.new(0, 200, 0, 170)
        frame.Position = UDim2.new(0.5, -100, 0.4, 0)
@@ -168,16 +200,13 @@ ShortcutTab:CreateButton({
        frame.Draggable = true
        frame.ClipsDescendants = true
 
-       -- UI corner
        local corner = Instance.new("UICorner", frame)
        corner.CornerRadius = UDim.new(0, 8)
 
-       -- UI stroke
        local stroke = Instance.new("UIStroke", frame)
        stroke.Color = Color3.fromRGB(255, 255, 255)
        stroke.Thickness = 2
 
-       -- Title label
        local title = Instance.new("TextLabel", frame)
        title.Size = UDim2.new(1, -60, 0, 40)
        title.Position = UDim2.new(0, 10, 0, 0)
@@ -188,13 +217,11 @@ ShortcutTab:CreateButton({
        title.TextColor3 = Color3.fromRGB(255, 255, 255)
        title.TextXAlignment = Enum.TextXAlignment.Left
 
-       -- Container frame for body content
        local content = Instance.new("Frame", frame)
        content.Size = UDim2.new(1, 0, 1, -40)
        content.Position = UDim2.new(0, 0, 0, 40)
        content.BackgroundTransparency = 1
 
-       -- Teleport to the Top button
        local buttonTop = Instance.new("TextButton", content)
        buttonTop.Size = UDim2.new(0.85, 0, 0, 32)
        buttonTop.Position = UDim2.new(0.075, 0, 0.05, 0)
@@ -210,7 +237,6 @@ ShortcutTab:CreateButton({
        local btnTopStroke = Instance.new("UIStroke", buttonTop)
        btnTopStroke.Color = Color3.fromRGB(255, 255, 255)
 
-       -- Teleport to the Finish Line button
        local buttonFinish = Instance.new("TextButton", content)
        buttonFinish.Size = UDim2.new(0.85, 0, 0, 32)
        buttonFinish.Position = UDim2.new(0.075, 0, 0.4, 0)
@@ -226,7 +252,6 @@ ShortcutTab:CreateButton({
        local btnFinishStroke = Instance.new("UIStroke", buttonFinish)
        btnFinishStroke.Color = Color3.fromRGB(255, 255, 255)
 
-       -- Credit
        local credit = Instance.new("TextLabel", content)
        credit.Size = UDim2.new(1, 0, 0, 20)
        credit.Position = UDim2.new(0, 0, 1, -20)
@@ -236,7 +261,6 @@ ShortcutTab:CreateButton({
        credit.TextSize = 14
        credit.TextColor3 = Color3.fromRGB(255, 255, 255)
 
-       -- Close Button
        local closeBtn = Instance.new("TextButton", frame)
        closeBtn.Size = UDim2.new(0, 25, 0, 25)
        closeBtn.Position = UDim2.new(1, -28, 0, 7)
@@ -246,7 +270,6 @@ ShortcutTab:CreateButton({
        closeBtn.TextSize = 18
        closeBtn.TextColor3 = Color3.fromRGB(255, 70, 70)
 
-       -- Minimize / Maximize Button
        local minimizeBtn = Instance.new("TextButton", frame)
        minimizeBtn.Size = UDim2.new(0, 25, 0, 25)
        minimizeBtn.Position = UDim2.new(1, -50, 0, 7)
@@ -256,7 +279,6 @@ ShortcutTab:CreateButton({
        minimizeBtn.TextSize = 22
        minimizeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 
-       -- Functionality
        buttonTop.MouseButton1Click:Connect(function()
            local killerTP = workspace:FindFirstChild("killerTP")
            if killerTP then
@@ -286,7 +308,6 @@ ShortcutTab:CreateButton({
            end
        end)
 
-       -- Rayfield notification when opening mini window
        Rayfield:Notify({
            Title = "Notification",
            Content = "Window Loaded!",
