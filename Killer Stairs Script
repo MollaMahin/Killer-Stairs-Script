@@ -1,5 +1,11 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
+local logoUrl = "https://cdn.discordapp.com/attachments/1453659040658751742/1556984559759794276/Untitled25_20260211142144.png?backend=b2&ex=6ac6265e&is=6ac4d4de&hm=575ad8792455bbec1ffd673029bbdd2a9eb89b9f14f91152b635694d4b75f6f3&"
+
+if not isfile("mmp_logo.png") then
+    writefile("mmp_logo.png", game:HttpGet(logoUrl))
+end
+
 local Window = Rayfield:CreateWindow({
    Name = "Killer Stairs | MMP",
    LoadingTitle = "Killer Stairs Script",
