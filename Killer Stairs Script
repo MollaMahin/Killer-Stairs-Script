@@ -22,7 +22,7 @@ local Window = Rayfield:CreateWindow({
    KeySettings = {
       Title = "MMP Key System",
       Subtitle = "Enter the Key to Access the Script.",
-      Note = "Don't know the key? Join our discord! https://discord.gg/2MPZG3MEVP",
+      Note = "Don't know the key? Join our discord! Link in the description on any videos!",
       FileName = "MMPKey",
       SaveKey = true,
       GrabKeyFromSite = false,
@@ -74,26 +74,6 @@ MainTab:CreateButton({
    end,
 })
 
-MainTab:CreateSection("Speed Hack")
-
-MainTab:CreateSlider({
-   Name = "WalkSpeed",
-   Range = {16, 100},
-   Increment = 1,
-   Suffix = "Speed",
-   CurrentValue = 16,
-   Flag = "SpeedSlider",
-   Callback = function(Value)
-       local player = game.Players.LocalPlayer
-       local character = player.Character or player.CharacterAdded:Wait()
-       local humanoid = character:FindFirstChildOfClass("Humanoid")
-       
-       if humanoid then
-           humanoid.WalkSpeed = Value
-       end
-   end,
-})
-
 MainTab:CreateSection("Credits")
 MainTab:CreateLabel("Script Made by MMP (@MMP_Main)")
 
@@ -122,7 +102,7 @@ MainTab:CreateButton({
 -- Player Tab with Lucide User Icon
 local PlayerTab = Window:CreateTab("Player", "user")
 
-PlayerTab:CreateSection("Actions")
+PlayerTab:CreateSection("Reset Player & Speed Hack")
 
 PlayerTab:CreateButton({
    Name = "Reset Player",
@@ -132,6 +112,24 @@ PlayerTab:CreateButton({
        
        if character then
            character:BreakJoints()
+       end
+   end,
+})
+
+PlayerTab:CreateSlider({
+   Name = "WalkSpeed",
+   Range = {16, 100},
+   Increment = 1,
+   Suffix = "Speed",
+   CurrentValue = 16,
+   Flag = "SpeedSlider",
+   Callback = function(Value)
+       local player = game.Players.LocalPlayer
+       local character = player.Character or player.CharacterAdded:Wait()
+       local humanoid = character:FindFirstChildOfClass("Humanoid")
+       
+       if humanoid then
+           humanoid.WalkSpeed = Value
        end
    end,
 })
