@@ -11,7 +11,7 @@ local customIcon = getcustomasset("mmp_logo.png")
 
 local Window = Rayfield:CreateWindow({
    Name = "Killer Stairs | MMP",
-   Icon = customIcon, -- Sets the top-left logo image for the Rayfield UI header
+   Icon = customIcon, -- Sets top-left custom logo for header
    LoadingTitle = "Killer Stairs Script",
    LoadingSubtitle = "by MMP",
    ShowText = "MMP",
@@ -21,17 +21,17 @@ local Window = Rayfield:CreateWindow({
    KeySystem = true,
    KeySettings = {
       Title = "MMP Key System",
-      Subtitle = "Enter Key to Access",
-      Note = "Don't know the key? Join our discord to get keys! Discord: https://discord.gg/2MPZG3MEVP",
+      Subtitle = "Enter the Key to Access the Script.",
+      Note = "Don't know the key? Join our discord! Link in the description on any videos.",
       FileName = "MMPKey",
-      SaveKey = false,
+      SaveKey = true,
       GrabKeyFromSite = false,
       Key = {"2026MMP"}
    }
 })
 
--- Main Tab
-local MainTab = Window:CreateTab("Main", 4483362458)
+-- Main Tab with Lucide Home Icon
+local MainTab = Window:CreateTab("Main", "home")
 
 MainTab:CreateSection("Teleportation")
 
@@ -49,7 +49,7 @@ MainTab:CreateButton({
                Title = "Notification",
                Content = "Teleported!",
                Duration = 3,
-               Image = 4483362458,
+               Image = "chevrons-right", -- Lucide Double Arrow
            })
        end
    end,
@@ -68,7 +68,7 @@ MainTab:CreateButton({
                Title = "Notification",
                Content = "Teleported!",
                Duration = 3,
-               Image = 4483362458,
+               Image = "chevrons-right", -- Lucide Double Arrow
            })
        end
    end,
@@ -106,21 +106,21 @@ MainTab:CreateButton({
                Title = "Notification",
                Content = 'Copied "https://discord.gg/2MPZG3MEVP"!',
                Duration = 3,
-               Image = 4483362458,
+               Image = "chevrons-right", -- Lucide Double Arrow
            })
        else
            Rayfield:Notify({
                Title = "Error",
                Content = "Your executor does not support setclipboard.",
                Duration = 3,
-               Image = 4483362458,
+               Image = "chevrons-right", -- Lucide Double Arrow
            })
        end
    end,
 })
 
--- Player Tab
-local PlayerTab = Window:CreateTab("Player", 4483362458)
+-- Player Tab with Lucide User Icon
+local PlayerTab = Window:CreateTab("Player", "user")
 
 PlayerTab:CreateSection("Actions")
 
@@ -158,8 +158,8 @@ PlayerTab:CreateButton({
    end,
 })
 
--- Shortcut Tab
-local ShortcutTab = Window:CreateTab("Shortcuts", 4483362458)
+-- Shortcut Tab with Lucide Double Arrow Icon
+local ShortcutTab = Window:CreateTab("Shortcuts", "chevrons-right")
 
 ShortcutTab:CreateSection("External Scripts & Utilities")
 
@@ -172,7 +172,7 @@ ShortcutTab:CreateButton({
            Title = "Notification",
            Content = "Infinite Yield Loaded!",
            Duration = 3,
-           Image = 4483362458,
+           Image = "chevrons-right", -- Lucide Double Arrow
        })
    end,
 })
@@ -312,7 +312,7 @@ ShortcutTab:CreateButton({
            Title = "Notification",
            Content = "Window Loaded!",
            Duration = 3,
-           Image = 4483362458,
+           Image = "chevrons-right", -- Lucide Double Arrow
        })
    end,
 })
